@@ -1,59 +1,45 @@
-import {  connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {Component} from 'react'
 
 import './App.css';
 
-class App extends Component {
+function App() {
+  const counter = useSelector(state=> state.counter)
+  const isHidden = useSelector(state=> state.isHidden)
+  const dispatch = useDispatch()
 
-  increseBy=()=>{
-    this.props.incby()
+  const increseBy=()=>{
+    dispatch({type:'increseby', amount:10})
   }
-  increment=()=>{
-    this.props.inc()
+  const increment=()=>{
+    dispatch({type:'inc'})
   }
-  decrement=()=>{
-    this.props.dec()
-  }
-
-  toggle =()=>{
-    this.props.toggle()
+  const decrement=()=>{
+    dispatch({type:'dec'})
   }
 
-
-  render(){
-    return (
-      <div className="App">
-        <button onClick={this.toggle.bind(this)}>toggle visibility</button>
-        {
-          this.props.isHidden ? null : (<div>
-            <h1>{this.props.counter}</h1>
-            <button onClick={this.increment.bind(this)}>increment</button>
-            <button onClick={this.increseBy.bind(this)}>increse by 10</button>
-            <button onClick={this.decrement.bind(this)}>decrement</button>
-    
-          </div>)
-        }
-        
-      </div>
-    );
-
+  const toggle =()=>{
+    dispatch({type:'toggleVisibility'})
   }
+
+
+  return (
+    <div className="App">
+      <button onClick={toggle}>toggle visibility</button>
+      {
+        isHidden ? null : (<div>
+          <h1>{counter}</h1>
+          <button onClick={increment}>increment</button>
+          <button onClick={increseBy}>increse by 10</button>
+          <button onClick={decrement}>decrement</button>
+  
+        </div>)
+      }
+      
+    </div>
+  );
+
 }
 
-const mapStateToProps = (state)=>{
-  return {
-    counter: state.counter,
-    isHidden : state.isHidden
-  }
-}
 
-const mapDispatchToProps = (dispatch)=>{
-  return {
-    incby: ()=>{dispatch({type:'increseby', amount:10})},
-    inc: ()=>{dispatch({type:'inc'})},
-    dec: ()=>{dispatch({type:'dec'})},
-    toggle: ()=>{dispatch({type:'toggleVisibility'})},
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
