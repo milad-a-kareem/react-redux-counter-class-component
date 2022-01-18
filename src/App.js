@@ -1,25 +1,59 @@
-import logo from './logo.svg';
+import {  connect } from 'react-redux'
+import {Component} from 'react'
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+
+  increseBy=()=>{
+    this.props.incby()
+  }
+  increment=()=>{
+    this.props.inc()
+  }
+  decrement=()=>{
+    this.props.dec()
+  }
+
+  toggle =()=>{
+    this.props.toggle()
+  }
+
+
+  render(){
+    return (
+      <div className="App">
+        <button onClick={this.toggle.bind(this)}>toggle visibility</button>
+        {
+          this.props.isHidden ? null : (<div>
+            <h1>{this.props.counter}</h1>
+            <button onClick={this.increment.bind(this)}>increment</button>
+            <button onClick={this.increseBy.bind(this)}>increse by 10</button>
+            <button onClick={this.decrement.bind(this)}>decrement</button>
+    
+          </div>)
+        }
+        
+      </div>
+    );
+
+  }
 }
 
-export default App;
+const mapStateToProps = (state)=>{
+  return {
+    counter: state.counter,
+    isHidden : state.isHidden
+  }
+}
+
+const mapDispatchToProps = (dispatch)=>{
+  return {
+    incby: ()=>{dispatch({type:'increseby', amount:10})},
+    inc: ()=>{dispatch({type:'inc'})},
+    dec: ()=>{dispatch({type:'dec'})},
+    toggle: ()=>{dispatch({type:'toggleVisibility'})},
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
